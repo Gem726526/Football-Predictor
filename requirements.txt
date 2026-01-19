@@ -1,0 +1,6 @@
+streamlit
+pandas
+plotly
+databricks-sql-connector
+requests
+python-dotenv

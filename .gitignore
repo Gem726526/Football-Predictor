@@ -1,0 +1,11 @@
+# Ignore Secret Keys
+.env
+.streamlit/secrets.toml
+
+# Ignore Python Cache
+__pycache__/
+*.pyc
+
+# Ignore Virtual Environments
+venv/
+.venv/
