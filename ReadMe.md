@@ -149,8 +149,10 @@ The app uses a **Statistical Heuristic Model** based on the derived Gold data:
 
 ```bash
 1.  **Upload Notebooks:** Import the `notebooks/` folder into your Databricks Workspace.
-2.  **Run Pipeline:** * Run `1_bronze_ingest` to fetch data.
-    * Run `2_silver_process` to clean data.
-    * Run `3_gold_features` to generate the Feature Store.
+2.  **Run Pipeline:**
+    * Run `00_Setup_Mount` to setup
+    * Run `01_Ingest_Raw_Leagues` to fetch data.
+    * Run `02_Transform_Silver` to clean data.
+    * Run `03_Engineer_Features_Gold` to generate the Feature Store.
 3.  **Get Credentials:** Go to **User Settings > Developer** and generate an Access Token.
 ```
