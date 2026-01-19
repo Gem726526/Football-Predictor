@@ -53,6 +53,104 @@ Follow these steps to set up the project on your local machine.
 ### 1. Clone the Repository
 
 ```bash
-git clone [https://github.com/YOUR_USERNAME/football-predictor.git](https://github.com/YOUR_USERNAME/football-predictor.git)
+git clone [https://github.com/Gem726526/Football-Predictor.git](https://github.com/Gem726526/Football-Predictor.git)
 cd football-predictor
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configure Secrets (Security)
+
+```bash
+Create a file named .env in the root directory. Do not commit this file. Add your Databricks credentials:
+
+DATABRICKS_HOSTNAME=adb-xxxxxxxx.xx.azuredatabricks.net
+DATABRICKS_HTTP_PATH=sql/protocolv1/o/xxxx/xxxx
+DATABRICKS_TOKEN=dapi...
+```
+
+### 4. Run the Application
+
+```bash
+streamlit run app.py
+```
+
+### Project Structure
+
+```bash
+football-predictor/
+├── app.py                 # Main Application (Frontend & Logic)
+├── requirements.txt       # Python Dependencies
+├── README.md              # Documentation
+├── .gitignore             # Security Rules
+└── assets/                # Screenshots and diagrams
+```
+
+### Tech Stack
+
+```bash
+Frontend: Streamlit, Plotly
+
+Backend: Azure Databricks (SQL Warehouse)
+
+Storage: Delta Lake (Gold Layer)
+
+Language: Python, SQL, PySpark
+```
+
+## Architecture & Data Pipeline
+
+The project follows the standard **Medallion Architecture**:
+
+### 1. Bronze Layer (Raw Ingestion)
+
+- **Source:** External Football APIs.
+- **Format:** JSON/CSV landing in Azure Data Lake Storage (ADLS).
+- **Notebook:** `notebooks/1_bronze_ingest.py`
+
+### 2. Silver Layer (Cleaning & Schema)
+
+- **Transformation:** Deduplication, date standardization, and renaming columns (e.g., `FTHG` -> `Full Time Home Goals`).
+- **Storage:** Delta Lake (Parquet).
+- **Notebook:** `notebooks/2_silver_process.py`
+
+### 3. Gold Layer (Feature Engineering)
+
+This is where the predictive analysis happens. We transform raw match results into "Team Features".
+
+- **Logic:** \* Explodes matches so every game creates two rows (one for Home, one for Away).
+  - Calculates **Rolling 5-Game Form** using SQL Window Functions.
+  - Computes **Venue Specific Form** (e.g., "How good is Arsenal at Home?").
+- **Notebook:** `notebooks/3_gold_features.sql`
+
+---
+
+## The Prediction Logic
+
+The app uses a **Statistical Heuristic Model** based on the derived Gold data:
+
+1.  **Fetch Data:** Get the last 5 games for both Home and Away teams.
+2.  **Calculate Form Score:**
+    - _Home Team Strength_ = Rolling Points in last 5 **HOME** games.
+    - _Away Team Strength_ = Rolling Points in last 5 **AWAY** games.
+3.  **Prediction Algorithm:**
+    $$\Delta = \text{HomeStrength} - \text{AwayStrength}$$
+    - **Home Win:** $\Delta \ge 3$
+    - **Away Win:** $\Delta \le -3$
+    - **Draw:** $-3 < \Delta < 3$
+
+---
+
+### Setting up the Data (Databricks)
+
+```bash
+1.  **Upload Notebooks:** Import the `notebooks/` folder into your Databricks Workspace.
+2.  **Run Pipeline:** * Run `1_bronze_ingest` to fetch data.
+    * Run `2_silver_process` to clean data.
+    * Run `3_gold_features` to generate the Feature Store.
+3.  **Get Credentials:** Go to **User Settings > Developer** and generate an Access Token.
 ```

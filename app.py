@@ -7,13 +7,12 @@ from typing import Tuple, List, Optional
 import os
 
 # --- FLEXIBLE SECRET MANAGEMENT ---
-# This block allows the app to run on both Local (.env) and Cloud (st.secrets)
-# without changing any code.
+# This block allows the app to run on both Local (.env) and Cloud (st.secrets) setups.
 try:
     from dotenv import load_dotenv
-    load_dotenv() # Loads .env file if it exists locally
+    load_dotenv() 
 except ImportError:
-    pass # If python-dotenv isn't installed (e.g. in cloud), just skip it
+    pass 
 
 # --- PAGE SETUP ---
 st.set_page_config(
@@ -40,7 +39,7 @@ ACCESS_TOKEN = get_config("DATABRICKS_TOKEN")
 
 # Security Check: Stop app if keys are missing
 if not all([SERVER_HOSTNAME, HTTP_PATH, ACCESS_TOKEN]):
-    st.error("🚨 Configuration Error: Missing Credentials.")
+    st.error("Configuration Error: Missing Credentials.")
     st.info("""
     **How to fix:**
     1. **Local:** Create a `.env` file with DATABRICKS_HOSTNAME, HTTP_PATH, and TOKEN.
@@ -274,7 +273,6 @@ else:
                             c1, c2 = st.columns(2)
                             
                             # Define the columns we want to see
-                            # We check if Opponent/Score exists first to avoid errors if fallback mode is active
                             cols_to_show = ['MatchDate', 'Venue', 'Home_Form', 'Away_Form']
                             if 'Opponent' in df_home.columns: cols_to_show.insert(2, 'Opponent')
                             if 'Score' in df_home.columns: cols_to_show.insert(3, 'Score')
