@@ -8,6 +8,8 @@ Unlike simple static dashboards, this project implements a **Lakehouse Architect
 
 ---
 
+Live View: https://eu-football-predictor.streamlit.app/
+
 ## Architecture
 
 The system follows the **Medallion Architecture** pattern:
@@ -53,7 +55,7 @@ Follow these steps to set up the project on your local machine.
 ### 1. Clone the Repository
 
 ```bash
-git clone [https://github.com/Gem726526/Football-Predictor.git](https://github.com/Gem726526/Football-Predictor.git)
+git clone https://github.com/Gem726526/Football-Predictor.git
 cd football-predictor
 ```
 
